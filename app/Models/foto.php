@@ -5,34 +5,30 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-
-
-
+use App\LikeTrait; // Import the LikeTrait
 
 class foto extends Model
 {
     use HasFactory;
+    use LikeTrait; // Use the LikeTrait
+
     protected $table = 'foto';
     protected $primaryKey = 'id';
-    protected $fillable = ['judul_foto','deskripsi_foto'];
+    protected $fillable = ['judul_foto', 'deskripsi_foto'];
     protected $dates = ['tanggal_posting'];
 
-protected static function boot()
-{
-    parent::boot();
+    protected static function boot()
+    {
+        parent::boot();
 
-    // Menetapkan tanggal_posting sebelum model disimpan
-    static::creating(function ($foto) {
-        $foto->tanggal_posting = Carbon::now();
-    });
-}
-
-
-    public function User(){
-        return $this->belongsTo('App\Models\User');
+        // Set the tanggal_posting before saving the model
+        static::creating(function ($foto) {
+            $foto->tanggal_posting = Carbon::now();
+        });
     }
 
+    public function User()
+    {
+        return $this->belongsTo('App\Models\User');
+    }
 }
-
-
-

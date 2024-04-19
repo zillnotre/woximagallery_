@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\like_foto;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,9 +22,13 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' =>['web','auth']], function(){
     Route::get('/', function () {
-        return view('welcome');
+        $foto = App\Models\Foto::all(); // Corrected the model name to match the class name
+        return view('welcome', ['foto' => $foto]); // Passing the $foto variable to the view
     });
 
+
     Route::post('/foto', [App\Http\Controllers\FotoController::class, 'store'])->name('foto.store');
+    Route::post('/foto/like', 'App\Http\Controllers\like_fotoController@likefoto')->name('likefoto');
+
 
 });
