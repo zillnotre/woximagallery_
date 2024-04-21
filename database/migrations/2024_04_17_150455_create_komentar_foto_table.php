@@ -15,6 +15,10 @@ return new class extends Migration
     {
         Schema::create('komentar_foto', function (Blueprint $table) {
             $table->id();
+            $table->integer('commentable_id');
+            $table->string('commentable_type');
+            $table->integer('user_id');
+            $table->text('isi_komentar');
             $table->timestamps();
         });
     }

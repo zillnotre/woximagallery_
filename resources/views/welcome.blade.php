@@ -76,23 +76,24 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="show_image">
-                            <div class="profile">
-                                <strong><small style="font-size: 25px;"><i class="fa fa-user"></i>
-                                    {{ $fot->user->name }}</small></strong>
+                            <div class="profile" style="display: flex; justify-content: space-between;">
+                                <strong><small style="font-size: 25px;"><i class="fa fa-user"></i>{{ $fot->user->name }}</small></strong>
+                                <small style="font-size: 18px;">{{$fot->created_at->diffForHumans()}}</small>
                             </div>
-                            <br>
+                            
+                          <hr>
                             <a href="#{{$fot->id}}" data-bs-toggle="modal"><img src="{{asset('images/'.$fot->image)}}" style="width: 100%; height: auto;"></a>
                         </div>
                         <br>
                         <div class="foto-footer" style="display: flex; flex-direction: column;">
                             <div class="caption" style="text-align: left;">
                                 <h5 style="font-size: 40px; font-weight: bold;">{{ $fot->judul_foto }}</h5>
-                                <small style="font-size: 18px;"><strong>{{$fot->user->name}}</strong>    {{ $fot->deskripsi_foto }}</small>
+                                <small style="font-size: 18px;">  {{ $fot->deskripsi_foto }}</small>
                                 <!-- Akses nama pengguna -->
                             </div>
                             <div class="button-footer" style="display: flex; align-items: center;">
                                 <a class="btn btn-default btn-sm" href="#{{$fot->id}}" data-bs-toggle="modal"><i class="fa fa-comment" style="font-size: 40px;"></i></a>
-                                <span class="btn btn-default btn-sm">5</span>
+                                <span class="btn btn-default btn-sm">{{$fot->comments()->count()}}</span>
                                 <span class="btn btn-default btn-sm like-animation {{$fot->YouLiked() ? "liked" : ""}}" onclick="likefoto('{{ $fot->id }}', this)">
                                     <i class="fa fa-heart" style="font-size: 40px;"></i>
                                 </span>
@@ -111,129 +112,55 @@
 
 {{-- Modal --}}
 @foreach($foto as $fot)
-    <div class="modal fade" id="{{$fot->id}}">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="show_modal_image">
-                       <div style="display: flex; justify-content: space-between;">
-    <h1><strong>{{$fot->judul_foto}}</strong></h1>
-    <span class="user-time" style="font-size: 18px;">{{$fot->created_at->format('d F Y H:i:s')}}</span>
-</div>
-
-
-                        <a href=""><img src="{{asset('images/'.$fot->image)}}" style="width: 100%; height: auto;"></a>
+<div class="modal fade" id="{{$fot->id}}">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="overflow-y: auto;">
+            <div class="modal-body">
+                <div class="show_modal_image">
+                    <div style="display: flex; justify-content: space-between;">
+                        <h1><strong>{{$fot->judul_foto}}</strong></h1>
+                        <span class="user-time" style="font-size: 18px;"><small>{{$fot->created_at->diffForHumans()}}</small></span>
                     </div>
-                    <br>
-                    <span style="font-size: 20px;" class="user-info"><strong>{{$fot->user->name}}</strong>  {{$fot->deskripsi_foto}}</span>
-                    <br>
-                    <h4>Comments: </h4>
-                        <form action="" method="">
-                            <div class="form-group">
-                                <input type="text" name="" class="form-control" placeholder="Comment here">
-                            </div>
-                            <button class="btn btn-primary btn-block w-100" type="submit" style="background-color: transparent; border-color: rgb(9, 9, 9); color: black; font-size: 20px;">Send</button>
-
-
-
-
-
-                        </form>
-                        <hr>
-                        <div class="comment-list">
-                            <div class="comment-body">
-                                <p>Isi Komentar</p>
-                                <div class="comment-info">
-                                    <span class="btn btn-default btn-xs"><i class="fa fa-thumbs-up"></i></span>
-                                    <button class="btn btn-default btn-xs">3</button>
-                                    <span class="pull-right">
-                                        <span>By Hua</span>
-                                        <span>2 min</span>
-                                    </span>
-                                </div>
-
-                            </div>
-                            <div class="comment-body">
-                                <p>Isi Komentar</p>
-                                <div class="comment-info">
-                                    <span class="btn btn-default btn-xs"><i class="fa fa-thumbs-up"></i></span>
-                                    <button class="btn btn-default btn-xs">3</button>
-                                    <span class="pull-right">
-                                        <span>By Hua</span>
-                                        <span>2 min</span>
-                                    </span>
-                                </div>
-
-                            </div>
-                            <div class="comment-body">
-                                <p>Isi Komentar</p>
-                                <div class="comment-info">
-                                    <span class="btn btn-default btn-xs"><i class="fa fa-thumbs-up"></i></span>
-                                    <button class="btn btn-default btn-xs">3</button>
-                                    <span class="pull-right">
-                                        <span>By Hua</span>
-                                        <span>2 min</span>
-                                    </span>
-                                </div>
-
-                            </div>
-                            <div class="comment-body">
-                                <p>Isi Komentar</p>
-                                <div class="comment-info">
-                                    <span class="btn btn-default btn-xs"><i class="fa fa-thumbs-up"></i></span>
-                                    <button class="btn btn-default btn-xs">3</button>
-                                    <span class="pull-right">
-                                        <span>By Hua</span>
-                                        <span>2 min</span>
-                                    </span>
-                                </div>
-
-                            </div>
-                            <div class="comment-body">
-                                <p>Isi Komentar</p>
-                                <div class="comment-info">
-                                    <span class="btn btn-default btn-xs"><i class="fa fa-thumbs-up"></i></span>
-                                    <button class="btn btn-default btn-xs">3</button>
-                                    <span class="pull-right">
-                                        <span>By Hua</span>
-                                        <span>2 min</span>
-                                    </span>
-                                </div>
-
-                            </div>
-                            <div class="comment-body">
-                                <p>Isi Komentar</p>
-                                <div class="comment-info">
-                                    <span class="btn btn-default btn-xs"><i class="fa fa-thumbs-up"></i></span>
-                                    <button class="btn btn-default btn-xs">3</button>
-                                    <span class="pull-right">
-                                        <span>By Hua</span>
-                                        <span>2 min</span>
-                                    </span>
-                                </div>
-
-                            </div>
-                            <div class="comment-body">
-                                <p>Isi Komentar</p>
-                                <div class="comment-info">
-                                    <span class="btn btn-default btn-xs"><i class="fa fa-thumbs-up"></i></span>
-                                    <button class="btn btn-default btn-xs">3</button>
-                                    <span class="pull-right">
-                                        <span>By Hua</span>
-                                        <span>2 min</span>
-                                    </span>
-                                </div>
-
-                            </div>
-                        </div>
-
-
-                    <span class="user-time"> {{$fot->created_at->format('d F Y H:i:s')}}</span>
-
+                    <a href=""><img src="{{asset('images/'.$fot->image)}}" style="width: 100%; height: auto;"></a>
                 </div>
+                <br>
+                <span style="font-size: 20px;" class="user-info"><strong>{{$fot->user->name}}</strong>  {{$fot->deskripsi_foto}}</span>
+                <br>
+                <br>
+                
+                <form action="{{ route('addComment', $fot->id) }}" method="post">
+                    @csrf
+                    <div class="form-group">
+                        <textarea type="text" name="isi_komentar" class="form-control" placeholder="Comment here"></textarea>
+                    </div>
+                    <button class="btn btn-primary btn-block w-100" type="submit" style="background-color: transparent; border-color: rgb(9, 9, 9); color: black; font-size: 20px;">Send</button>
+                </form>
+                <hr>
+                <p style="font-size: 18px;">{{$fot->comments()->count()}}  Komentar</p>
+                <div class="comment-list">
+                    @if($fot->comments->isEmpty())
+                    <div class="text-center">No Comment</div>
+                    @else
+                    @foreach($fot->comments as $comment)
+                    <div class="comment-body">
+                        <p style="color: black;"><i class="fa fa-user"></i> <strong>{{$comment->user->name}}</strong> {{$comment->isi_komentar}}</p>
+                        <br>
+                        <div class="comment-info">
+                            <span class="btn btn-default btn-xs"></span>
+                            <span class="pull-right">
+                                
+                                <span>{{$comment->created_at->diffForHumans()}}</span>
+                            </span>
+                        </div>
+                    </div>
+                    @endforeach
+                    @endif
+                </div>
+                <span class="user-time"> {{$fot->created_at->format('d F Y H:i:s')}}</span>
             </div>
         </div>
     </div>
+</div>
 @endforeach
 
 
@@ -295,7 +222,8 @@
     padding: 12px;
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
-    border: 1px solid black; /* Menambahkan garis tepi berwarna hitam */
+    border: 1px solid black;
+    
     margin-bottom: 17px;
     font-size: 20px;
 }
@@ -318,7 +246,7 @@
 
     }
     body {
-            background-color: rgb(9, 9, 21);
+            background-color: rgb(231, 231, 236);
         }
         .card{
             border-radius: 20px;
@@ -329,7 +257,7 @@
         }
         body {
     font-family: 'Montserrat', sans-serif;
-    color: white;
+    color: rgb(6, 5, 5);
 }
 
 

@@ -31,4 +31,7 @@ Route::group(['middleware' =>['web','auth']], function(){
     Route::post('/foto/like', 'App\Http\Controllers\like_fotoController@likefoto')->name('likefoto');
 
 
+    Route::post('comment/{foto}', 'App\Http\Controllers\Komentar_FotoController@postComment')->name('addComment');
+
+
 });
