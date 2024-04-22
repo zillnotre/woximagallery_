@@ -77,10 +77,37 @@
                     <div class="card-body">
                         <div class="show_image">
                             <div class="profile" style="display: flex; justify-content: space-between;">
-                                <strong><small style="font-size: 25px;"><i class="fa fa-user"></i>{{ $fot->user->name }}</small></strong>
-                                <small style="font-size: 18px;">{{$fot->created_at->diffForHumans()}}</small>
+                                @if(Auth::user()->id == $fot->user_id)
+                                <form action="{{ route('foto.delete', $fot->id) }}" method="POST" id="deleteForm">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="button" onclick="confirmDelete()" class="delete-button">
+                                        <i class="fa fa-trash"></i> <!-- Tambahkan ikon Font Awesome untuk hapus -->
+                                    </button>
+                                    <strong>
+                                        <small style="font-size: 25px;">
+                                            <i class="fa fa-user"></i>
+                                            {{ $fot->user->name }}
+                                        </small>
+                                    </strong>
+                                </form>
+                            @else
+                                <strong>
+                                    <small style="font-size: 25px;">
+                                        <i class="fa fa-user"></i>
+                                        {{ $fot->user->name }}
+                                    </small>
+                                </strong>
+                            @endif
+
+
+
+
+
+
+                                <small style="font-size: 15px;">{{$fot->created_at->diffForHumans()}}</small>
                             </div>
-                            
+
                           <hr>
                             <a href="#{{$fot->id}}" data-bs-toggle="modal"><img src="{{asset('images/'.$fot->image)}}" style="width: 100%; height: auto;"></a>
                         </div>
@@ -88,9 +115,10 @@
                         <div class="foto-footer" style="display: flex; flex-direction: column;">
                             <div class="caption" style="text-align: left;">
                                 <h5 style="font-size: 40px; font-weight: bold;">{{ $fot->judul_foto }}</h5>
-                                <small style="font-size: 18px;">  {{ $fot->deskripsi_foto }}</small>
+                                <small style="font-size: 18px;" class="deskripsi_foto">  {{ $fot->deskripsi_foto }}</small>
                                 <!-- Akses nama pengguna -->
                             </div>
+
                             <div class="button-footer" style="display: flex; align-items: center;">
                                 <a class="btn btn-default btn-sm" href="#{{$fot->id}}" data-bs-toggle="modal"><i class="fa fa-comment" style="font-size: 40px;"></i></a>
                                 <span class="btn btn-default btn-sm">{{$fot->comments()->count()}}</span>
@@ -118,16 +146,18 @@
             <div class="modal-body">
                 <div class="show_modal_image">
                     <div style="display: flex; justify-content: space-between;">
-                        <h1><strong>{{$fot->judul_foto}}</strong></h1>
+                        <h1 style="font-size: 45px;"><strong>{{$fot->judul_foto}}</strong></h1>
                         <span class="user-time" style="font-size: 18px;"><small>{{$fot->created_at->diffForHumans()}}</small></span>
                     </div>
+                    <hr>
+
                     <a href=""><img src="{{asset('images/'.$fot->image)}}" style="width: 100%; height: auto;"></a>
                 </div>
                 <br>
-                <span style="font-size: 20px;" class="user-info"><strong>{{$fot->user->name}}</strong>  {{$fot->deskripsi_foto}}</span>
+                <span style="font-size: 20px; font-size: 20px; font-family: sans-serif;" class="user-info"><strong>{{$fot->user->name}}</strong>  {{$fot->deskripsi_foto}}</span>
                 <br>
                 <br>
-                
+
                 <form action="{{ route('addComment', $fot->id) }}" method="post">
                     @csrf
                     <div class="form-group">
@@ -143,12 +173,13 @@
                     @else
                     @foreach($fot->comments as $comment)
                     <div class="comment-body">
-                        <p style="color: black;"><i class="fa fa-user"></i> <strong>{{$comment->user->name}}</strong> {{$comment->isi_komentar}}</p>
+                        <p style="color: black; font-size: 25px; font-family: sans-serif;"><i class="fa fa-user"></i> <strong>{{$comment->user->name}}</strong> </p>
+                        <p style="font-size: 20px; font-family: sans-serif;">{{$comment->isi_komentar}}</p>
                         <br>
                         <div class="comment-info">
                             <span class="btn btn-default btn-xs"></span>
                             <span class="pull-right">
-                                
+
                                 <span>{{$comment->created_at->diffForHumans()}}</span>
                             </span>
                         </div>
@@ -220,13 +251,14 @@
 
 .comment-body {
     padding: 12px;
-    border-top-right-radius: 20px;
-    border-bottom-left-radius: 20px;
-    border: 1px solid black;
-    
+    border-top-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
     margin-bottom: 17px;
     font-size: 20px;
 }
+
 .comment-body p{
     font-size: 20px;
     margin-bottom: 10px;
@@ -245,6 +277,15 @@
         height: 30%;
 
     }
+    .delete-button {
+    border: none; /* Menghilangkan border */
+    background: none; /* Menghilangkan background */
+    padding: 0; /* Menghilangkan padding */
+    margin-right: 10px;
+}
+.delete-button i.fa-trash {
+    font-size: 30px; /* Sesuaikan dengan ukuran yang diinginkan */
+}
     body {
             background-color: rgb(231, 231, 236);
         }
@@ -260,12 +301,23 @@
     color: rgb(6, 5, 5);
 }
 
+.deskripsi_foto {
+        font-family: sans-serif;
+        /* Tambahkan properti lain sesuai kebutuhan Anda */
+    }
+
+
 
 
 </style>
 @section('js')
 <script type="text/javascript">
-function likefoto(fotoId, elem){
+ function confirmDelete() {
+        if (confirm('Apakah kamu yakin ingin menghapus foto ini?')) {
+            document.getElementById('deleteForm').submit();
+        }
+    }
+    function likefoto(fotoId, elem){
     var csrfToken = '{{csrf_token()}}';
     var likeCount = parseInt($('#'+fotoId+"-count").text());
 
@@ -278,6 +330,9 @@ function likefoto(fotoId, elem){
                 $(elem).addClass('liked'); // Menambahkan kelas 'liked' untuk mengubah warna tombol
                 $(elem).addClass('like-animation'); // Menambahkan kelas 'like-animation' untuk memicu animasi pulse
                 $(elem).animate({fontSize: '+=5px'}, 'fast'); // Animasi scaling tombol saat like diberikan
+
+                // Tambahkan kelas 'like-animation' secara manual
+                $(elem).addClass('like-animation');
             } else if(data.message === 'Unliked'){
                 $('#'+fotoId+"-count").text(likeCount-1);
                 $(elem).removeClass('liked'); // Menghapus kelas 'liked' untuk mengembalikan warna tombol ke semula
@@ -287,6 +342,7 @@ function likefoto(fotoId, elem){
         }
     });
 }
+
 
 
 

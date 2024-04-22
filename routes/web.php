@@ -2,6 +2,7 @@
 
 use App\Models\like_foto;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\FotoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,8 @@ Route::group(['middleware' =>['web','auth']], function(){
     Route::post('/foto/like', 'App\Http\Controllers\like_fotoController@likefoto')->name('likefoto');
 
 
+
+    Route::delete('/foto/{id}', 'App\Http\Controllers\FotoController@delete')->name('foto.delete');
     Route::post('comment/{foto}', 'App\Http\Controllers\Komentar_FotoController@postComment')->name('addComment');
 
 
