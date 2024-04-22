@@ -32,6 +32,11 @@ class foto extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    public function album()
+    {
+        return $this->belongsTo(Album::class); 
+    }
+
     public function comments()
     {
         return $this->morphMany('App\Models\komentar_foto', 'commentable');

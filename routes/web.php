@@ -36,5 +36,27 @@ Route::group(['middleware' =>['web','auth']], function(){
     Route::delete('/foto/{id}', 'App\Http\Controllers\FotoController@delete')->name('foto.delete');
     Route::post('comment/{foto}', 'App\Http\Controllers\Komentar_FotoController@postComment')->name('addComment');
 
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/albums', [App\Http\Controllers\AlbumController::class, 'index'])->name('albums.index');
+        Route::get('/albums/create', [App\Http\Controllers\AlbumController::class, 'create'])->name('albums.create');
+        Route::post('/albums', [App\Http\Controllers\AlbumController::class, 'store'])->name('albums.store');
+        Route::get('/albums/{album}', [App\Http\Controllers\AlbumController::class, 'show'])->name('albums.show');
+        Route::get('/albums/{album}/edit', [App\Http\Controllers\AlbumController::class, 'edit'])->name('albums.edit');
+        Route::put('/albums/{album}', [App\Http\Controllers\AlbumController::class, 'update'])->name('albums.update');
+        Route::delete('/albums/{album}', [App\Http\Controllers\AlbumController::class, 'destroy'])->name('albums.destroy');
+
+
+        Route::get('/welcome', [App\Http\Controllers\AlbumController::class, 'index'])->name('welcome');
+
+        Route::get('/albums/{album}', 'App\Http\Controllers\AlbumController@show')->name('album.show');
+
+    });
+
+
+
+    // Route::resource('albums', AlbumController::class);
+    // Route::post('/albums', 'AlbumController@store')->name('albums.store');
+
+
 
 });

@@ -13,18 +13,84 @@
             <div class="text-start mb-3">
                 <!-- Memindahkan elemen "Selamat Datang" keluar dari div card -->
                 <div class="card-header" style="font-size: 45px; margin-bottom: 0;">Selamat Datang Di Woxima, {{Auth::user()->nama_lengkap}}!</div>
+                @if(Auth::user()->albums->isEmpty())
+            <div class="text-start mb-3">
+                <div class="card-header" style="font-size: 20px;">Silahkan Buat Album Terlebih Dahulu!</div>
             </div>
+            @endif
+            </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createAlbumModal">
+                Buat Album
+              </button>
             <p>Ayo Upload Foto Mu!</p>
             <a href="#uploadFoto" data-bs-toggle="modal" class="btn btn-primary btn-block d-block"><i class="fa fa-upload"></i> Upload Foto</a>
         </div>
     </div>
 </div>
+<br>
 
 
 
+  <!-- Modal -->
+  <div class="modal fade" id="createAlbumModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Create New Album</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" action="{{ route('albums.store') }}">
+            @csrf
+            <div class="mb-3">
+              <label for="nama_album" class="form-label">Album Name</label>
+              <input type="text" class="form-control" id="nama_album" name="nama_album" required>
+            </div>
+            <div class="mb-3">
+              <label for="deskripsi" class="form-label">Description</label>
+              <textarea class="form-control" id="deskripsi" name="deskripsi" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Create</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
+  <div class="container">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body" style="font-size: 50px;"> <!-- Adjust the font size here -->
+               Album
+            </div>
+        </div>
+    </div>
+</div>
+<br>
 
-
+<div class="container">
+    <div class="row justify-content-center">
+        @if(Auth::user()->albums->isEmpty())
+            <p style="text-align: center">Belum ada album yang dibuat.</p>
+        @else
+            @foreach(Auth::user()->albums as $album)
+               <div class="col-md-4 mb-4">
+        <div class="card">
+            @if($album->foto->isNotEmpty())
+                <img src="{{ asset('images/'.$album->foto->first()->image) }}" class="card-img-top" alt="First Photo">
+            @endif
+            <div class="card-body">
+                <h5 class="card-title">{{ $album->nama_album }}</h5>
+                <p class="card-text">{{ $album->deskripsi }}</p>
+                <!-- Tambahkan tombol atau tautan untuk melihat foto dalam album -->
+                <a href="{{ route('album.show', $album->id) }}" class="btn btn-primary">Lihat Album</a>
+            </div>
+        </div>
+    </div>
+@endforeach
+        @endif
+    </div>
+</div>
 <!-- Modal -->
 <div class="modal fade" id="uploadFoto" role="dialog" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -44,6 +110,19 @@
                         <input type="string" name="judul_foto" class="form-control" placeholder="Judul Foto...">
                     </div>
                     <br>
+                    <p>Pilih Album</p>
+                    <select name="album_id" id="album" class="form-control">
+                        @foreach(Auth::user()->albums as $album)
+                            <option value="{{ $album->id }}">{{ $album->nama_album }}</option>
+                        @endforeach
+                    </select>
+
+
+
+
+                    </div>
+                   <br>
+
                     <div class="form-group">
                         <textarea name="deskripsi_foto" placeholder="Masukkan Deskripsi..." class="form-control"></textarea>
                     </div>
@@ -55,12 +134,11 @@
     </div>
 </div>
 
-<br>
 <div class="container">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body" style="font-size: 50px;"> <!-- Adjust the font size here -->
-                Gallery
+                Foto
             </div>
         </div>
     </div>
@@ -258,7 +336,6 @@
     margin-bottom: 17px;
     font-size: 20px;
 }
-
 .comment-body p{
     font-size: 20px;
     margin-bottom: 10px;
@@ -302,8 +379,9 @@
 }
 
 .deskripsi_foto {
-        font-family: sans-serif;
-        /* Tambahkan properti lain sesuai kebutuhan Anda */
+    font-family: sans-serif;
+
+
     }
 
 
@@ -312,6 +390,17 @@
 </style>
 @section('js')
 <script type="text/javascript">
+ $(document).ready(function() {
+        $('#uploadFoto').on('click', function() {
+            // Periksa apakah pengguna memiliki album
+            var hasAlbum = {{ Auth::user()->albums->isNotEmpty() ? 'true' : 'false' }};
+            if (!hasAlbum) {
+                // Tampilkan pesan error jika pengguna tidak memiliki album
+                alert('Anda harus membuat album terlebih dahulu sebelum mengunggah foto.');
+                return false; // Hentikan aksi mengunggah foto
+            }
+        });
+    });
  function confirmDelete() {
         if (confirm('Apakah kamu yakin ingin menghapus foto ini?')) {
             document.getElementById('deleteForm').submit();
@@ -355,4 +444,5 @@
 </script>
 
 @endsection
+
 
