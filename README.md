@@ -37,7 +37,7 @@ Untuk Fitur masih minim:
 
 - Relasi
 
-![Screenshot (127)](https://github.com/zillnotre/woximagallery_/assets/140696260/be520529-23a6-47be-a32b-b6496a974a20)
+![Screenshot (129)](https://github.com/zillnotre/woximagallery_/assets/140696260/a625861e-6332-41c5-8d52-ca4f55c60c6c)
 
 
 - UML
