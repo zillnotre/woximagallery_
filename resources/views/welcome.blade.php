@@ -75,18 +75,18 @@
         @else
             @foreach(Auth::user()->albums as $album)
                <div class="col-md-4 mb-4">
-        <div class="card">
-            @if($album->foto->isNotEmpty())
-                <img src="{{ asset('images/'.$album->foto->first()->image) }}" class="card-img-top" alt="First Photo">
-            @endif
-            <div class="card-body">
-                <h5 class="card-title">{{ $album->nama_album }}</h5>
-                <p class="card-text">{{ $album->deskripsi }}</p>
-                <!-- Tambahkan tombol atau tautan untuk melihat foto dalam album -->
-                <a href="{{ route('album.show', $album->id) }}" class="btn btn-primary">Lihat Album</a>
+                <div class="card">
+                    @if($album->foto->isNotEmpty())
+                        <img src="{{ asset('images/'.$album->foto->first()->image) }}" class="card-img-top" alt="First Photo">
+                    @endif
+                    <div class="card-body">
+                        <h5 class="card-title">{{ $album->nama_album }}</h5>
+                        <p class="card-text">{{ $album->deskripsi }}</p>
+                        <!-- Tambahkan tombol atau tautan untuk melihat foto dalam album -->
+                        <a href="{{ route('album.show', $album->id) }}" class="btn btn-primary">Lihat Album</a>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
 @endforeach
         @endif
     </div>
@@ -156,12 +156,12 @@
                         <div class="show_image">
                             <div class="profile" style="display: flex; justify-content: space-between;">
                                 @if(Auth::user()->id == $fot->user_id)
-                                <form action="{{ route('foto.delete', $fot->id) }}" method="POST" id="deleteForm">
+                                <form action="{{ route('foto.delete', $fot->id) }}" method="POST" id="deleteForm_{{ $fot->id }}">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="button" onclick="confirmDelete()" class="delete-button">
-                                        <i class="fa fa-trash"></i> <!-- Tambahkan ikon Font Awesome untuk hapus -->
-                                    </button>
+                                    <button type="button" onclick="confirmDelete('{{ $fot->id }}')" class="delete-button">
+                                     <i class="fa fa-trash"></i>
+                                      </button>
                                     <strong>
                                         <small style="font-size: 25px;">
                                             <i class="fa fa-user"></i>
@@ -401,11 +401,11 @@
             }
         });
     });
- function confirmDelete() {
-        if (confirm('Apakah kamu yakin ingin menghapus foto ini?')) {
-            document.getElementById('deleteForm').submit();
-        }
+    function confirmDelete(fotoId) {
+    if (confirm('Apakah kamu yakin ingin menghapus foto ini?')) {
+        document.getElementById('deleteForm_' + fotoId).submit();
     }
+}
     function likefoto(fotoId, elem){
     var csrfToken = '{{csrf_token()}}';
     var likeCount = parseInt($('#'+fotoId+"-count").text());

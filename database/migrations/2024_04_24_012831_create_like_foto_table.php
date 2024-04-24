@@ -15,12 +15,17 @@ return new class extends Migration
     {
         Schema::create('like_foto', function (Blueprint $table) {
             $table->id();
-            $table->integer('likeable_id');
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('likeable_id'); // Mengubah tipe data menjadi unsignedBigInteger
             $table->string('likeable_type');
-            $table->integer('user_id');
             $table->timestamps();
+
+            // Define foreign key constraints
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('likeable_id')->references('id')->on('foto')->onDelete('cascade');
         });
     }
+
 
     /**
      * Reverse the migrations.

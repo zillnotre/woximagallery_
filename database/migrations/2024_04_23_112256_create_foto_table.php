@@ -19,10 +19,11 @@ return new class extends Migration
             $table->string('judul_foto');
             $table->text('deskripsi_foto');
             $table->date('tanggal_posting');
-            // $table->string('lokasi_file');
-            $table->integer('album_id');
-            $table->integer('user_id');
+            $table->unsignedBigInteger('album_id');
+            $table->unsignedBigInteger('user_id'); // Menggunakan unsignedBigInteger agar sesuai dengan id di tabel users
             $table->timestamps();
+            $table->index('user_id');
+            $table->index('album_id');
         });
     }
 

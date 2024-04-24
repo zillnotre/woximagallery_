@@ -15,11 +15,15 @@ return new class extends Migration
     {
         Schema::create('komentar_foto', function (Blueprint $table) {
             $table->id();
-            $table->integer('commentable_id');
+            $table->unsignedBigInteger('commentable_id');
             $table->string('commentable_type');
-            $table->integer('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->text('isi_komentar');
             $table->timestamps();
+            $table->index('commentable_id');
+            $table->index('user_id');
+            $table->foreign('commentable_id')->references('id')->on('foto')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -33,3 +37,4 @@ return new class extends Migration
         Schema::dropIfExists('komentar_foto');
     }
 };
+

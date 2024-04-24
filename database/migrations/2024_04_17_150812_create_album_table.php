@@ -18,8 +18,9 @@ return new class extends Migration
             $table->string('nama_album');
             $table->text('deskripsi');
             $table->date('tanggal_dibuat');
-            $table->integer('user_id');
+            $table->unsignedBigInteger('user_id'); // Menggunakan unsignedBigInteger agar sesuai dengan id di tabel users
             $table->timestamps();
+            $table->index('user_id');
         });
     }
 
