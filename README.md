@@ -7,11 +7,12 @@ Website Gallery yang dibuat untuk project UKK
 
 ## Fitur
 
-Untuk Fitur masih minim:
+Untuk Fiturnya:
 - register
 - log in
 - log out
-- add poto
+- add foto
+- delete foto
 - add album
 - preview album
 - add comment
