@@ -33,7 +33,7 @@ Untuk Fitur masih minim:
 
 - ERD
 - 
-![woxima](https://github.com/zillnotre/woximagallery_/assets/140696260/210b96da-7f63-42e2-b554-4519d759d072)
+![Woxima ERD](https://github.com/zillnotre/woximagallery_/assets/140696260/1e72f850-4914-402b-8ef2-45074cbf95ca)
 
 - Relasi
 
